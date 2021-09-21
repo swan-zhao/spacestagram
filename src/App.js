@@ -1,70 +1,65 @@
 import "./styles/App.css"
-import React, { useState, useEffect, Suspense } from "react"
-const Post = React.lazy(() => import("./Post"))
+import React, { useState, useEffect } from "react"
+import Post from "./Post"
+import InfiniteScroll from "react-infinite-scroller"
 
 const API_KEY = process.env.REACT_APP_NASA_API_KEY
 const API_ENDPOINT = process.env.REACT_APP_NASA_ENDPOINT
 
 function App() {
   const [photos, setPhotos] = useState([])
-  const [isFetching, setIsFetching] = useState(false)
-  const [page, setPage] = useState(1)
 
   useEffect(() => {
-    fetchData()
-    window.addEventListener("scroll", handleScroll)
+    fetchMoreData()
   }, [])
 
-  const handleScroll = () => {
-    if (
-      Math.ceil(window.innerHeight + document.documentElement.scrollTop) !==
-        document.documentElement.offsetHeight ||
-      isFetching
-    )
-      return
-    setIsFetching(true)
-    console.log(isFetching)
-  }
-
-  const fetchData = async () => {
+  const fetchMoreData = async () => {
     setTimeout(async () => {
       const result = await fetch(
         `${API_ENDPOINT}planetary/apod?api_key=${API_KEY}&count=4`
       )
       const data = await result.json()
-      setPage(page + 1)
       setPhotos(() => {
         return [...photos, ...data]
       })
     }, 1000)
   }
 
-  useEffect(() => {
-    if (!isFetching) return
-    fetchMoreListItems()
-  }, [isFetching])
-
-  const fetchMoreListItems = () => {
-    fetchData()
-    setIsFetching(false)
-  }
-
   return (
-    <main>
+    <React.Fragment>
       <header>
         <h1>Spacestagram</h1>
+        <small>An infinite feed of NASA's APOD photos for your enjoyment</small>
+        <div id="playlist">
+          <iframe
+            title="space playlist"
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX1n9whBbBKoL?theme=0"
+            width="100%"
+            height="80"
+            frameBorder="0"
+            allowtransparency="true"
+            allow="encrypted-media"
+          ></iframe>
+        </div>
       </header>
-      <body>
-        {photos.map((photo, idx) => (
-          <Suspense fallback={<div>Loading...</div>}>
+      <main>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={fetchMoreData}
+          hasMore={true || false}
+          loader={
+            <footer className="loader" key={0}>
+              <h3>Loading more space goodies...</h3>
+            </footer>
+          }
+        >
+          {photos.map((photo, idx) => (
             <Post photo={photo} idx={idx} />
-          </Suspense>
-        ))}
-      </body>
-      <footer>{isFetching && <h1>Loading more space goodies...</h1>}</footer>
-    </main>
+          ))}
+        </InfiniteScroll>
+      </main>
+    </React.Fragment>
   )
-  // }
 }
 
 export default App

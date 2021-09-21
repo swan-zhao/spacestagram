@@ -9,7 +9,7 @@ body {
 section {
   display: flex;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 700px;
   width: 100%;
   height: auto;
   background-color: white;
@@ -26,14 +26,14 @@ span {
 }
 
 img {
-  max-width: 600px;
+  max-width: 700px;
   width: 100%;
   height: auto;
   border-radius: 20px 20px 0 0;
 }
 
 h1 {
-  margin: 1rem 0 1rem 0;
+  margin: 1rem 0 0.5rem 0;
 }
 
 h5 {
@@ -56,4 +56,10 @@ button {
 
 #heart {
   margin: 1rem 0 1rem 0;
+}
+
+#playlist {
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 1rem;
 }
