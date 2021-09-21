@@ -7,7 +7,6 @@ const API_KEY = process.env.REACT_APP_NASA_API_KEY
 const API_ENDPOINT = process.env.REACT_APP_NASA_ENDPOINT
 
 function App() {
-  const [isLoaded, setIsLoaded] = useState(false)
   const [photos, setPhotos] = useState([])
 
   useEffect(() => {
@@ -27,7 +26,7 @@ function App() {
   }
 
   return (
-    <main>
+    <React.Fragment>
       <header>
         <h1>Spacestagram</h1>
         <small>An infinite feed of NASA's APOD photos for your enjoyment</small>
@@ -43,7 +42,7 @@ function App() {
           ></iframe>
         </div>
       </header>
-      <body>
+      <main>
         <InfiniteScroll
           pageStart={0}
           loadMore={fetchMoreData}
@@ -58,8 +57,8 @@ function App() {
             <Post photo={photo} idx={idx} />
           ))}
         </InfiniteScroll>
-      </body>
-    </main>
+      </main>
+    </React.Fragment>
   )
 }
 
